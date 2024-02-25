@@ -5,12 +5,10 @@ import com.goylik.bookservice.controller.config.BookControllerAbstractTest;
 import com.goylik.bookservice.model.dto.BookRequest;
 import com.goylik.bookservice.model.dto.BookDto;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,19 +18,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class BookControllerPositiveTest extends BookControllerAbstractTest {
     @Test
-    public void testGetBooks() throws Exception {
-        Page<BookDto> bookPage = new PageImpl<>(Collections.singletonList(bookDto));
-        when(bookService.getBooks(any(PageRequest.class))).thenReturn(bookPage);
+    public void testGetAllBooks() throws Exception {
+        List<BookDto> books = Collections.singletonList(bookDto);
+        when(bookService.getAllBooks()).thenReturn(books);
 
         mockMvc.perform(get("/api/book/all"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content[0].id", equalTo((int) bookDto.getId())))
-                .andExpect(jsonPath("$.content[0].isbn", equalTo(bookDto.getIsbn())))
-                .andExpect(jsonPath("$.content[0].title", equalTo(bookDto.getTitle())))
-                .andExpect(jsonPath("$.content[0].genre", equalTo(bookDto.getGenre())))
-                .andExpect(jsonPath("$.content[0].description", equalTo(bookDto.getDescription())))
-                .andExpect(jsonPath("$.content[0].author", equalTo(bookDto.getAuthor())));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", equalTo((int) bookDto.getId())))
+                .andExpect(jsonPath("$[0].isbn", equalTo(bookDto.getIsbn())))
+                .andExpect(jsonPath("$[0].title", equalTo(bookDto.getTitle())))
+                .andExpect(jsonPath("$[0].genre", equalTo(bookDto.getGenre())))
+                .andExpect(jsonPath("$[0].description", equalTo(bookDto.getDescription())))
+                .andExpect(jsonPath("$[0].author", equalTo(bookDto.getAuthor())));
     }
 
     @Test

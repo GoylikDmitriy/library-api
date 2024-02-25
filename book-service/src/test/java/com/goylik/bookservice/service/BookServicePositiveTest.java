@@ -5,8 +5,6 @@ import com.goylik.bookservice.model.dto.BookDto;
 import com.goylik.bookservice.model.entity.Book;
 import com.goylik.bookservice.service.config.BookServiceAbstractTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,20 +15,18 @@ import static org.mockito.Mockito.*;
 
 public class BookServicePositiveTest extends BookServiceAbstractTest {
     @Test
-    public void testGetBooks() {
+    public void testGetAllBooks() {
         List<Book> books = Collections.singletonList(book);
-        Page<Book> bookPage = new PageImpl<>(books, pageable, books.size());
 
-        when(bookRepository.findAll(pageable)).thenReturn(bookPage);
+        when(bookRepository.findAll()).thenReturn(books);
         when(modelMapper.map(book, BookDto.class)).thenReturn(bookDto);
 
-        Page<BookDto> result = bookService.getBooks(pageable);
+        List<BookDto> result = bookService.getAllBooks();
 
-        verify(bookRepository, times(1)).findAll(pageable);
+        verify(bookRepository, times(1)).findAll();
 
-        assertEquals(1, result.getTotalElements());
-        assertEquals(1, result.getContent().size());
-        assertEquals(bookDto, result.getContent().get(0));
+        assertEquals(1, result.size());
+        assertEquals(bookDto, result.get(0));
     }
 
     @Test

@@ -2,11 +2,11 @@ package com.goylik.bookservice.service;
 
 import com.goylik.bookservice.model.dto.BookRequest;
 import com.goylik.bookservice.model.dto.BookDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface BookService {
-    Page<BookDto> getBooks(Pageable pageable);
+    List<BookDto> getAllBooks();
     BookDto getBookById(long id);
     BookDto getBookByIsbn(String isbn);
     BookDto addBook(BookRequest bookDto);

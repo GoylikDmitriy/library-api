@@ -9,10 +9,11 @@ import com.goylik.bookservice.service.exception.BookNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -23,11 +24,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<BookDto> getBooks(Pageable pageable) {
-        log.info("Getting all books by pages.");
+    public List<BookDto> getAllBooks() {
+        log.info("Getting all books.");
 
-        Page<Book> books = bookRepository.findAll(pageable);
-        return books.map(b -> modelMapper.map(b, BookDto.class));
+        List<Book> books = bookRepository.findAll();
+        return books.stream()
+                .map(b -> modelMapper.map(b, BookDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override

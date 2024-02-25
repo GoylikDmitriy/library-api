@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 public class BookServiceAbstractTest {
@@ -23,7 +22,6 @@ public class BookServiceAbstractTest {
 
     protected Book book;
     protected BookDto bookDto;
-    protected final Pageable pageable = Pageable.ofSize(10);
 
     @BeforeEach
     public void setupBook() {
