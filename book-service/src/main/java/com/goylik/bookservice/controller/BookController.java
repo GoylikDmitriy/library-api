@@ -1,5 +1,7 @@
 package com.goylik.bookservice.controller;
 
+import com.goylik.bookservice.client.LibraryServiceClient;
+import com.goylik.bookservice.model.dto.BookClientDto;
 import com.goylik.bookservice.model.dto.BookRequest;
 import com.goylik.bookservice.model.dto.BookDto;
 import com.goylik.bookservice.service.BookService;
@@ -17,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class BookController {
+    private final LibraryServiceClient libraryServiceClient;
     private final BookService bookService;
 
     @GetMapping("/all")
@@ -41,7 +44,11 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     public BookDto addBook(@Valid @RequestBody BookRequest bookDto) {
         log.info("[POST]: Adding a new book: {}", bookDto);
-        return bookService.addBook(bookDto);
+        BookDto addedBook = bookService.addBook(bookDto);
+
+        libraryServiceClient.addBook(new BookClientDto(addedBook.getId()));
+
+        return addedBook;
     }
 
     @PutMapping("/{id}")
