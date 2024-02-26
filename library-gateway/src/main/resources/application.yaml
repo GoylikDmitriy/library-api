@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: library-gateway
+  cloud:
+    gateway:
+      mvc:
+        routes:
+        - id: book-service
+          uri: lb://book-service
+          predicates:
+            - Path=/api/book/**
+        - id: library-service
+          uri: lb://library-service
+          predicates:
+            - Path=/api/library/**
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8000/eureka/
+
+server:
+  port: 8080
