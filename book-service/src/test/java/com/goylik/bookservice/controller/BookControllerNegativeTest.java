@@ -2,14 +2,16 @@ package com.goylik.bookservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goylik.bookservice.controller.config.BookControllerAbstractTest;
+import com.goylik.bookservice.model.dto.BookClientDto;
 import com.goylik.bookservice.model.dto.BookRequest;
 import com.goylik.bookservice.service.exception.BookNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -87,6 +89,9 @@ public class BookControllerNegativeTest extends BookControllerAbstractTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(invalidBookRequest)))
                 .andExpect(status().isBadRequest());
+
+        verify(libraryServiceClient, never()).addBook(any(BookClientDto.class));
+
     }
 
     @Test

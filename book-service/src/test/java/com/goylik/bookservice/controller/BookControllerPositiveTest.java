@@ -2,6 +2,7 @@ package com.goylik.bookservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goylik.bookservice.controller.config.BookControllerAbstractTest;
+import com.goylik.bookservice.model.dto.BookClientDto;
 import com.goylik.bookservice.model.dto.BookRequest;
 import com.goylik.bookservice.model.dto.BookDto;
 import org.junit.jupiter.api.Test;
@@ -81,6 +82,8 @@ public class BookControllerPositiveTest extends BookControllerAbstractTest {
                 .andExpect(jsonPath("$.genre", equalTo(addBookDto.getGenre())))
                 .andExpect(jsonPath("$.description", equalTo(addBookDto.getDescription())))
                 .andExpect(jsonPath("$.author", equalTo(addBookDto.getAuthor())));
+
+        verify(libraryServiceClient, times(1)).addBook(any(BookClientDto.class));
     }
 
     @Test
