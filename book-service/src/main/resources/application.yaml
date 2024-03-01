@@ -5,6 +5,23 @@ spring:
     url: jdbc:postgresql://localhost:5432/books
     username: postgres
     password: 1234
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+        alphanumeric-ids:
+          enabled: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      default:
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+  timelimiter:
+    instances:
+      default:
+        timeoutDuration: 5s
 
 eureka:
   client:
