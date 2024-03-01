@@ -17,8 +17,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>book-service</module>
         <module>library-server</module>
+        <module>book-service</module>
         <module>library-service</module>
         <module>library-gateway</module>
     </modules>
