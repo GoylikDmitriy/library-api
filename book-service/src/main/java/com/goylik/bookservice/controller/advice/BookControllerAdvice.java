@@ -9,6 +9,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestControllerAdvice
 @Slf4j
 public class BookControllerAdvice {
@@ -22,13 +25,20 @@ public class BookControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ErrorResponse handleValidationExceptions(MethodArgumentNotValidException ex) {
-        StringBuilder sb = new StringBuilder();
-        ex.getBindingResult().getAllErrors()
-                .forEach(error -> sb.append(error.getDefaultMessage()).append("\n"));
+    public Map<String, Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, Object> response = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            String fieldName = fieldError.getField();
+            String errorMessage = fieldError.getDefaultMessage();
+            response.put(fieldName, errorMessage);
+        });
 
-        log.error("[BAD REQUEST]: {}.", sb, ex);
-        return new ErrorResponse("Bad Request", 400, sb.toString());
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("error", "Bad Request");
+        response.put("message", "Error occurred due to validation data.");
+
+        log.error("[BAD REQUEST]: {}.", response, ex);
+        return response;
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
