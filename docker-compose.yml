@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  postgres-books:
+    build: postgres-books
+    ports:
+      - '5431:5431'
+    environment:
+      - POSTGRES_DB=books
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - PGDATA=/data/postgres-books
+    volumes:
+      - ./postgres-books-data:/data/postgres-books
+
+  postgres-library:
+    build: postgres-library
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_DB=library
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - PGDATA=/data/postgres-library
+    volumes:
+      - ./postgres-library-data:/data/postgres-library
+
+  library-server:
+    build: library-server
+    ports:
+      - '8761:8761'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_INSTANCE_HOSTNAME=localhost
+      - SERVER_PORT=8761
+
+  book-service:
+    build: book-service
+    depends_on:
+      - postgres-books
+      - library-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-books:5431/books
+
+  library-service:
+    build: library-service
+    depends_on:
+      - postgres-library
+      - library-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-library:5432/library
+
+  library-gateway:
+    build: library-gateway
+    ports:
+      - '8080:8080'
+    depends_on:
+      - library-server
+      - book-service
+      - library-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker

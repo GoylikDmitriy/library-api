@@ -5,11 +5,13 @@ spring:
     url: jdbc:postgresql://localhost:5432/library
     username: postgres
     password: 1234
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8000/eureka/
+      defaultZone: http://localhost:8761/eureka/
 
 server:
   port: 0

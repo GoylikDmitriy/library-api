@@ -11,6 +11,7 @@
 	<artifactId>library-gateway</artifactId>
 	<name>library-gateway</name>
 	<description>library-gateway</description>
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>

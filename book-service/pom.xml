@@ -11,6 +11,7 @@
     <artifactId>book-service</artifactId>
     <name>book-service</name>
     <description>book-service</description>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

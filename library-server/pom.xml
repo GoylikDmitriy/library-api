@@ -11,6 +11,7 @@
     <artifactId>library-server</artifactId>
     <name>library-server</name>
     <description>library-server</description>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
