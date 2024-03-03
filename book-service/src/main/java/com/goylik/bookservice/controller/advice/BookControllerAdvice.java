@@ -1,6 +1,7 @@
 package com.goylik.bookservice.controller.advice;
 
 import com.goylik.bookservice.model.dto.ErrorResponse;
+import com.goylik.bookservice.model.dto.ValidationErrorResponse;
 import com.goylik.bookservice.service.exception.BookNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -25,18 +26,15 @@ public class BookControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, Object> response = new HashMap<>();
+    public ValidationErrorResponse handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
             String fieldName = fieldError.getField();
             String errorMessage = fieldError.getDefaultMessage();
-            response.put(fieldName, errorMessage);
+            errors.put(fieldName, errorMessage);
         });
 
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("error", "Bad Request");
-        response.put("message", "Error occurred due to validation data.");
-
+        ValidationErrorResponse response = new ValidationErrorResponse("Bad Request", 400, errors);
         log.error("[BAD REQUEST]: {}.", response, ex);
         return response;
     }
