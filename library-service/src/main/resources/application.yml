@@ -15,3 +15,9 @@ eureka:
 
 server:
   port: 0
+
+springdoc:
+  api-docs:
+    path: /api/library/v3/api-docs
+  swagger-ui:
+    path: /api/library/swagger-ui.html
