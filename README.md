@@ -11,8 +11,12 @@ To run the project:
    ```bash
    git clone https://github.com/GoylikDmitriy/library-api.git
    ```
+2. Build the project using the following command in the root folder:
 
-2. Start the project using the following command in root folder:
+   ```mvn
+   mvn clean install
+   ```
+3. Start the project using the following command in the root folder:
 
    ```docker-compose
    docker-compose up
