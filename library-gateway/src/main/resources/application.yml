@@ -13,6 +13,11 @@ spring:
           uri: lb://library-service
           predicates:
             - Path=/api/library/**
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuerUri: http://localhost:8090/realms/library-api-realm
 
 eureka:
   client:
