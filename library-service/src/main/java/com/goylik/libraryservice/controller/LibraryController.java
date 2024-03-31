@@ -1,14 +1,11 @@
 package com.goylik.libraryservice.controller;
 
-import com.goylik.libraryservice.model.dto.LibraryBookDto;
 import com.goylik.libraryservice.model.dto.BookUpdateRequest;
 import com.goylik.libraryservice.service.LibraryService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/library")
@@ -17,10 +14,11 @@ import java.util.List;
 public class LibraryController {
     private final LibraryService libraryService;
 
-    @GetMapping("/available-books")
-    public List<LibraryBookDto> getAvailableBooks() {
-        log.info("[GET]: Getting all available books.");
-        return libraryService.getAvailableBooks();
+    @GetMapping("/{id}/availability")
+    public ResponseEntity<Boolean> verifyBookAvailability(@PathVariable("id") long bookId) {
+        log.info("[GET]: Verifying book availability.");
+        boolean isAvailable = libraryService.verifyBookAvailability(bookId);
+        return ResponseEntity.ok(isAvailable);
     }
 
     @PutMapping("/{id}")
@@ -32,11 +30,17 @@ public class LibraryController {
         return ResponseEntity.ok("Book was updated successfully.");
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<String> addBook(@RequestBody LibraryBookDto bookDto) {
-        log.info("[POST]: Adding book to the library. Book = {}", bookDto);
-
-        libraryService.addBook(bookDto);
+    @PostMapping("/{id}")
+    public ResponseEntity<String> addBook(@PathVariable("id") long bookId) {
+        log.info("[POST]: Adding book to the library. Book id = {}", bookId);
+        libraryService.addBook(bookId);
         return ResponseEntity.ok("Book was added successfully.");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteBookById(@PathVariable("id") long bookId) {
+        log.info("[DELETE]: Deleting book from library. Book id = {}", bookId);
+        libraryService.deleteBookById(bookId);
+        return ResponseEntity.ok("Book was deleted successfully.");
     }
 }

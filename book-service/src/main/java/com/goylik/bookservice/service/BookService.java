@@ -6,6 +6,7 @@ import com.goylik.bookservice.model.dto.BookDto;
 import java.util.List;
 
 public interface BookService {
+    List<BookDto> getAvailableBooks();
     List<BookDto> getAllBooks();
     BookDto getBookById(long id);
     BookDto getBookByIsbn(String isbn);

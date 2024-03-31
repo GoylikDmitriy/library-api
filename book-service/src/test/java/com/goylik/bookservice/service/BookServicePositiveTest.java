@@ -5,6 +5,7 @@ import com.goylik.bookservice.model.dto.BookDto;
 import com.goylik.bookservice.model.entity.Book;
 import com.goylik.bookservice.service.config.BookServiceAbstractTest;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +15,39 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class BookServicePositiveTest extends BookServiceAbstractTest {
+    @Test
+    public void testGetAvailableBooksBookAvailable() {
+        List<Book> books = Collections.singletonList(book);
+
+        when(bookRepository.findAll()).thenReturn(books);
+        when(modelMapper.map(book, BookDto.class)).thenReturn(bookDto);
+        when(libraryServiceClient.verifyBookAvailability(book.getId())).thenReturn(ResponseEntity.ok(Boolean.TRUE));
+
+        List<BookDto> result = bookService.getAvailableBooks();
+
+        assertEquals(1, result.size());
+        assertEquals(bookDto, result.get(0));
+
+        verify(bookRepository, times(1)).findAll();
+        verify(libraryServiceClient, times(1)).verifyBookAvailability(book.getId());
+    }
+
+    @Test
+    public void testGetAvailableBooksBookNotAvailable() {
+        List<Book> books = Collections.singletonList(book);
+
+        when(bookRepository.findAll()).thenReturn(books);
+        when(modelMapper.map(book, BookDto.class)).thenReturn(bookDto);
+        when(libraryServiceClient.verifyBookAvailability(book.getId())).thenReturn(ResponseEntity.ok(Boolean.FALSE));
+
+        List<BookDto> result = bookService.getAvailableBooks();
+
+        assertEquals(0, result.size());
+
+        verify(bookRepository, times(1)).findAll();
+        verify(libraryServiceClient, times(1)).verifyBookAvailability(book.getId());
+    }
+
     @Test
     public void testGetAllBooks() {
         List<Book> books = Collections.singletonList(book);
@@ -74,10 +108,12 @@ public class BookServicePositiveTest extends BookServiceAbstractTest {
         when(modelMapper.map(addBookDto, Book.class)).thenReturn(addBook);
         when(bookRepository.save(any(Book.class))).thenReturn(book);
         when(modelMapper.map(book, BookDto.class)).thenReturn(bookDto);
+        when(libraryServiceClient.addBook(book.getId())).thenReturn(ResponseEntity.ok("Book added successfully."));
 
         BookDto result = bookService.addBook(addBookDto);
 
         verify(bookRepository, times(1)).save(any(Book.class));
+        verify(libraryServiceClient, times(1)).addBook(book.getId());
 
         assertEquals(bookDto, result);
     }
@@ -112,10 +148,12 @@ public class BookServicePositiveTest extends BookServiceAbstractTest {
     public void testDeleteBookById() {
         long id = 1L;
         when(bookRepository.findById(id)).thenReturn(Optional.of(book));
+        when(libraryServiceClient.deleteBookById(book.getId())).thenReturn(ResponseEntity.ok("Book was deleted successfully."));
 
         bookService.deleteBookById(id);
 
         verify(bookRepository, times(1)).findById(id);
         verify(bookRepository, times(1)).delete(book);
+        verify(libraryServiceClient, times(1)).deleteBookById(id);
     }
 }

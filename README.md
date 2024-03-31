@@ -25,7 +25,7 @@ To run the project:
 ## Swagger Documentation
 ### Book-Service
 
-To access the Swagger documentation for the book-service use the following URLs: `/api/book/swagger-ui.html` and `/api/book/v3/api-docs` for docs.
+To access the Swagger documentation for the book-service use the following URLs: `/api/books/swagger-ui.html` and `/api/books/v3/api-docs` for docs.
 
 ### Library-Service
 
@@ -35,18 +35,20 @@ To access the Swagger documentation for the library-service use the following UR
 
 The Web API provides the following main functionality for managing books:
 
-1. Retrieve a list of all books: GET `/api/book/all`
+1. Retrieve a list of all books: GET `/api/books`
 
-2. Retrieve a specific book by its ID: GET `/api/book/{id}`
+2. Retrieve a specific book by its ID: GET `/api/books/{id}`
 
-3. Retrieve a book by its ISBN: GET `/api/book/isbn/{isbn}`
+3. Retrieve a book by its ISBN: GET `/api/books/isbn/{isbn}`
 
-4. Add a new book: POST `/api/book/add`
+4. Add a new book: POST `/api/books`
    - also send ID of the added book to the library-service.
 
-5. Update information about an existing book: PUT `/api/book/{id}`
+5. Update information about an existing book: PUT `/api/books/{id}`
 
-6. Delete a book: DELETE `/api/book/{id}`
+6. Delete a book: DELETE `/api/books/{id}`
+
+7. Retrieve a list of available books: GET `/api/books/available` 
 
 ## Additional Functionality (library-service)
 
@@ -60,6 +62,10 @@ In addition to the main CRUD operations, the Web API includes an additional serv
 
 The Web API provides the following additional functionality:
 
-1. Retrieve a list of available books: GET `/api/library/available-books`
+1. Verify book availability: GET `/api/library/{id}/availability`
+
+2. Add a new book: POST `/api/library/{id}`
      
-2. Update borrowed and return times of the book with specified ID: PUT `/api/library/{id}`
+3. Update borrowed and return times of the book with specified ID: PUT `/api/library/{id}`
+
+4. Delete book: DELETE `/api/library/{id}`

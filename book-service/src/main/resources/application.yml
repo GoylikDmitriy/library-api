@@ -35,6 +35,6 @@ server:
 
 springdoc:
   api-docs:
-    path: /api/book/v3/api-docs
+    path: /api/books/v3/api-docs
   swagger-ui:
-    path: /api/book/swagger-ui.html
+    path: /api/books/swagger-ui.html
