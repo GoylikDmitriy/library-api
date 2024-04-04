@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.doThrow;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,6 +31,7 @@ public class LibraryControllerNegativeTest extends LibraryControllerAbstractTest
         doThrow(new BookNotFoundException(exceptionMsg)).when(libraryService).updateBook(bookId, bookDto);
 
         mockMvc.perform(put("/api/library/2")
+                        .with(jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(bookDto)))
                 .andExpect(status().isNotFound())
@@ -45,6 +47,7 @@ public class LibraryControllerNegativeTest extends LibraryControllerAbstractTest
         bookDto.setReturnTime(LocalDateTime.now().plusDays(7));
 
         mockMvc.perform(put("/api/library/invalid")
+                        .with(jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(bookDto)))
                 .andExpect(status().isBadRequest())

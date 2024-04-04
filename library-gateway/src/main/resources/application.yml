@@ -3,21 +3,28 @@ spring:
     name: library-gateway
   cloud:
     gateway:
-      mvc:
-        routes:
-        - id: book-service
-          uri: lb://book-service
-          predicates:
-            - Path=/api/books/**
-        - id: library-service
-          uri: lb://library-service
-          predicates:
-            - Path=/api/library/**
+      routes:
+      - id: book-service
+        uri: lb://book-service
+        predicates:
+          - Path=/api/books/**
+      - id: library-service
+        uri: lb://library-service
+        predicates:
+          - Path=/api/library/**
+      default-filters:
+        - TokenRelay
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          issuerUri: http://localhost:8090/realms/library-api-realm
+      client:
+        registration:
+          keycloak:
+            client-id: library-gateway-client
+            client-secret: GbLnqywXMan94yO6MmhqxjsuAAr4tmr9
+            scope: openid, roles
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8090/realms/library-api-realm
 
 eureka:
   client:

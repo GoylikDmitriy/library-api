@@ -13,6 +13,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -22,7 +23,7 @@ public class BookControllerPositiveTest extends BookControllerAbstractTest {
         List<BookDto> books = Collections.singletonList(bookDto);
         when(bookService.getAllBooks()).thenReturn(books);
 
-        mockMvc.perform(get("/api/books"))
+        mockMvc.perform(get("/api/books").with(jwt()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", equalTo((int) bookDto.getId())))
@@ -37,7 +38,7 @@ public class BookControllerPositiveTest extends BookControllerAbstractTest {
     public void testGetBookById() throws Exception {
         when(bookService.getBookById(1L)).thenReturn(bookDto);
 
-        mockMvc.perform(get("/api/books/1"))
+        mockMvc.perform(get("/api/books/1").with(jwt()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo((int) bookDto.getId())))
                 .andExpect(jsonPath("$.isbn", equalTo(bookDto.getIsbn())))
@@ -51,7 +52,7 @@ public class BookControllerPositiveTest extends BookControllerAbstractTest {
     public void testGetBookByIsbn() throws Exception {
         when(bookService.getBookByIsbn("978-3-16-148410-0")).thenReturn(bookDto);
 
-        mockMvc.perform(get("/api/books/isbn/978-3-16-148410-0"))
+        mockMvc.perform(get("/api/books/isbn/978-3-16-148410-0").with(jwt()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo((int) bookDto.getId())))
                 .andExpect(jsonPath("$.isbn", equalTo(bookDto.getIsbn())))
@@ -73,6 +74,7 @@ public class BookControllerPositiveTest extends BookControllerAbstractTest {
         when(bookService.addBook(any(BookRequest.class))).thenReturn(bookDto);
 
         mockMvc.perform(post("/api/books")
+                        .with(jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(addBookDto)))
                 .andExpect(status().isCreated())
@@ -93,6 +95,7 @@ public class BookControllerPositiveTest extends BookControllerAbstractTest {
         updateBookDto.setAuthor("New Author");
 
         mockMvc.perform(put("/api/books/1")
+                        .with(jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(updateBookDto)))
                 .andExpect(status().isOk())
@@ -101,7 +104,7 @@ public class BookControllerPositiveTest extends BookControllerAbstractTest {
 
     @Test
     public void testDeleteBook() throws Exception {
-        mockMvc.perform(delete("/api/books/1"))
+        mockMvc.perform(delete("/api/books/1").with(jwt()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Book was deleted successfully."));
     }

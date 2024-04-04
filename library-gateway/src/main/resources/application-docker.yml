@@ -9,6 +9,12 @@ eureka:
 spring:
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          issuerUri: http://keycloak:8090/realms/library-api-realm
+      client:
+        registration:
+          keycloak:
+            client-id: library-gateway-client
+            client-secret: BOStAfSrlIQn8MI43AYGWu4EDtbtdZnS
+            scope: openid, roles
+        provider:
+          keycloak:
+            issuer-uri: http://keycloak:8090/realms/library-api-realm
