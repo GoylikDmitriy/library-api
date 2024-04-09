@@ -10,11 +10,6 @@ spring:
   security:
     oauth2:
       client:
-        registration:
-          keycloak:
-            client-id: library-gateway-client
-            client-secret: BOStAfSrlIQn8MI43AYGWu4EDtbtdZnS
-            scope: openid, roles
         provider:
           keycloak:
             issuer-uri: http://keycloak:8090/realms/library-api-realm

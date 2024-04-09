@@ -46,10 +46,11 @@ services:
       - KC_DB_USERNAME=postgres
       - KC_DB_PASSWORD=1234
     ports:
-      - '8090:8080'
+      - '8090:8090'
     command:
       - start-dev
       - --import-realm
+      - --http-port=8090
     volumes:
       - ./realms:/opt/keycloak/data/import/
 
@@ -90,5 +91,11 @@ services:
       - book-service
       - library-service
       - keycloak
+      - redis
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+
+  redis:
+    image: "redis:7.0"
+    ports:
+      - '6379:6379'
