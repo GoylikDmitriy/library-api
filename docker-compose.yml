@@ -46,10 +46,11 @@ services:
       - KC_DB_USERNAME=postgres
       - KC_DB_PASSWORD=1234
     ports:
-      - '8090:8080'
+      - '8090:8090'
     command:
       - start-dev
       - --import-realm
+      - --http-port=8090
     volumes:
       - ./realms:/opt/keycloak/data/import/
 
@@ -67,6 +68,7 @@ services:
     depends_on:
       - postgres-books
       - library-server
+      - keycloak
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-books:5431/books
@@ -76,6 +78,7 @@ services:
     depends_on:
       - postgres-library
       - library-server
+      - keycloak
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-library:5432/library
@@ -88,5 +91,11 @@ services:
       - book-service
       - library-service
       - keycloak
+      - redis
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+
+  redis:
+    image: "redis:7.0"
+    ports:
+      - '6379:6379'

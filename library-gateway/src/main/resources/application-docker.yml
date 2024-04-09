@@ -9,6 +9,7 @@ eureka:
 spring:
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          issuerUri: http://keycloak:8090/realms/library-api-realm
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://keycloak:8090/realms/library-api-realm

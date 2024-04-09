@@ -7,6 +7,7 @@ import com.goylik.libraryservice.model.dto.BookUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ public class LibraryControllerPositiveTest extends LibraryControllerAbstractTest
 
         when(libraryService.verifyBookAvailability(bookId)).thenReturn(true);
 
-        mockMvc.perform(get("/api/library/1/availability"))
+        mockMvc.perform(get("/api/library/1/availability").with(jwt()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }
@@ -32,6 +33,7 @@ public class LibraryControllerPositiveTest extends LibraryControllerAbstractTest
         bookDto.setReturnTime(LocalDateTime.now().plusDays(7));
 
         mockMvc.perform(put("/api/library/1")
+                        .with(jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(bookDto)))
                 .andExpect(status().isOk())
@@ -43,7 +45,7 @@ public class LibraryControllerPositiveTest extends LibraryControllerAbstractTest
         LibraryBookDto bookDto = new LibraryBookDto();
         bookDto.setBookId(1L);
 
-        mockMvc.perform(post("/api/library/1"))
+        mockMvc.perform(post("/api/library/1").with(jwt()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Book was added successfully."));
     }
