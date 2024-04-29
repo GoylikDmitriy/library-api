@@ -59,5 +59,6 @@ public class BookServiceNegativeTest extends BookServiceAbstractTest {
 
         verify(bookRepository, times(1)).findById(id);
         verify(bookRepository, never()).delete(book);
+        verify(libraryServiceClient, never()).deleteBookById(id);
     }
 }

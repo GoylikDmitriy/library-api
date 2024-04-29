@@ -8,7 +8,7 @@ spring:
         - id: book-service
           uri: lb://book-service
           predicates:
-            - Path=/api/book/**
+            - Path=/api/books/**
         - id: library-service
           uri: lb://library-service
           predicates:

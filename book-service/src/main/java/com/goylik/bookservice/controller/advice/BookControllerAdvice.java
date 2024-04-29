@@ -3,6 +3,7 @@ package com.goylik.bookservice.controller.advice;
 import com.goylik.bookservice.model.dto.ErrorResponse;
 import com.goylik.bookservice.model.dto.ValidationErrorResponse;
 import com.goylik.bookservice.service.exception.BookNotFoundException;
+import com.goylik.bookservice.service.exception.ServiceUnavailableException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,13 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class BookControllerAdvice {
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ErrorResponse handleServiceUnavailableException(ServiceUnavailableException ex) {
+        log.error("[SERVICE UNAVAILABLE]: {}.", ex.getMessage(), ex);
+        return new ErrorResponse("Service Unavailable", 503, ex.getMessage());
+    }
 
     @ExceptionHandler(BookNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

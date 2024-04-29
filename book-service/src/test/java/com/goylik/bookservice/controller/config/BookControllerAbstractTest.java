@@ -1,6 +1,5 @@
 package com.goylik.bookservice.controller.config;
 
-import com.goylik.bookservice.client.LibraryServiceClient;
 import com.goylik.bookservice.controller.BookController;
 import com.goylik.bookservice.model.dto.BookDto;
 import com.goylik.bookservice.service.BookService;
@@ -17,8 +16,6 @@ public abstract class BookControllerAbstractTest {
     protected MockMvc mockMvc;
     @MockBean
     protected BookService bookService;
-    @MockBean
-    protected LibraryServiceClient libraryServiceClient;
 
     protected BookDto bookDto;
 

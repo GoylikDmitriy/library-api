@@ -1,7 +1,5 @@
 package com.goylik.bookservice.controller;
 
-import com.goylik.bookservice.client.LibraryServiceClient;
-import com.goylik.bookservice.model.dto.BookClientDto;
 import com.goylik.bookservice.model.dto.BookRequest;
 import com.goylik.bookservice.model.dto.BookDto;
 import com.goylik.bookservice.service.BookService;
@@ -15,14 +13,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/book")
+@RequestMapping("/api/books")
 @AllArgsConstructor
 @Slf4j
 public class BookController {
-    private final LibraryServiceClient libraryServiceClient;
     private final BookService bookService;
 
-    @GetMapping("/all")
+    @GetMapping("/available")
+    public List<BookDto> getAvailableBooks() {
+        log.info("[GET]: Getting all available books.");
+        return bookService.getAvailableBooks();
+    }
+
+    @GetMapping
     public List<BookDto> getAllBooks() {
         log.info("[GET]: Retrieving all books.");
         return bookService.getAllBooks();
@@ -40,15 +43,11 @@ public class BookController {
         return bookService.getBookByIsbn(isbn);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookDto addBook(@Valid @RequestBody BookRequest bookDto) {
         log.info("[POST]: Adding a new book: {}", bookDto);
-        BookDto addedBook = bookService.addBook(bookDto);
-
-        libraryServiceClient.addBook(new BookClientDto(addedBook.getId()));
-
-        return addedBook;
+        return bookService.addBook(bookDto);
     }
 
     @PutMapping("/{id}")

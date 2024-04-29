@@ -1,5 +1,6 @@
 package com.goylik.bookservice.service.config;
 
+import com.goylik.bookservice.client.LibraryServiceClient;
 import com.goylik.bookservice.model.dto.BookDto;
 import com.goylik.bookservice.model.entity.Book;
 import com.goylik.bookservice.repository.BookRepository;
@@ -17,6 +18,8 @@ public class BookServiceAbstractTest {
     protected BookServiceImpl bookService;
     @Mock
     protected BookRepository bookRepository;
+    @Mock
+    protected LibraryServiceClient libraryServiceClient;
     @Mock
     protected ModelMapper modelMapper;
 
